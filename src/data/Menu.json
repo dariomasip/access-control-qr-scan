@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Inicio",
+    "iconSrc": "/icons/home.svg",
+    "disabled": false,
+    "path": "/"
+  },
+  {
+    "name": "Actividad",
+    "iconSrc": "/icons/history.svg",
+    "disabled": false,
+    "path": "/"
+  },
+  {
+    "name": "Escanear",
+    "iconSrc": "/icons/qr_code.svg",
+    "disabled": false,
+    "path": "/scan"
+  },
+  {
+    "name": "Novedades",
+    "iconSrc": "/icons/notifications.svg",
+    "disabled": true
+  },
+  {
+    "name": "Más",
+    "iconSrc": "/icons/reorder.svg",
+    "disabled": true
+  }
+]

@@ -1,0 +1,27 @@
+.home-contenedor {
+    padding: 0 1.2rem;
+    margin-top: .8rem;
+}
+
+.home-contenedor__main-content {
+    background-color: #1A1A11;
+    padding: 1rem 1rem;
+    border-radius: 1ch;
+}
+
+
+.home-contenedor__main-content__porcentil {
+    display: flex;
+    align-items: center;
+    column-gap: 1.2rem;
+    margin-bottom: .5rem;
+}
+
+.home-contenedor__main-content__porcentil__value {
+    background:linear-gradient(to left, #F9E687, #B59233);
+    padding: .1rem .5rem;
+    border-radius: 50ch;
+    font-weight: 700;
+    color: #5e500b;
+    font-size: 1.2rem;
+}

@@ -1,0 +1,45 @@
+.result-contenedor {
+    padding: 0 1.2rem;
+    margin-top: .8rem;
+}
+
+.result-contenedor__main {
+    background-color: #1A1A11;
+    padding: 1rem 1rem;
+    border-radius: 1ch;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.result-contenedor__main__text {
+    display: flex;
+    align-items: center;
+    column-gap: .6rem;
+}
+
+.result-contenedor__main__code {
+    font-size: 2rem;
+}
+
+.result-contenedor__main__status {
+    font-size: 1.6rem;
+    margin-top: .5rem;
+}
+
+.result-contenedor__main__passed {
+    margin-top: 1.6rem;
+}
+
+.result-contenedor__main__passed__list {
+    list-style: none;
+}
+
+.result-contenedor__main__passed__list__item {
+    column-gap: .4rem;
+    margin-top: .3rem;
+}
+
+.result-contenedor__main__passed__list__item img {
+    margin-right: .3rem;
+}
