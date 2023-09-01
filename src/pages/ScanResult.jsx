@@ -4,10 +4,11 @@ import "./ScanResult.css";
 const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
   const [validationCode, setValidationCode] = useState([{}]);
   const [isValidCode, setValidCode] = useState(null);
-  const [playSound, setPlaySound] = useState(false);
+  const [type, setType] = useState();
+  console.log("🚀 ~ file: ScanResult.jsx:8 ~ ScanResult ~ type:", type);
 
   useEffect(() => {
-    setToScan(false);
+    setToScan(true);
 
     const isValidCode = validCodes.find((item) => item.code === result);
     const isUniqueCode = recordsCodes.some((item) => item.code === result);
@@ -22,10 +23,6 @@ const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
     ];
 
     const validCode = newValidationCode.every((item) => item.validated);
-
-    if (validCode) {
-      setPlaySound(true);
-    }
 
     setValidationCode(newValidationCode);
     setValidCode(validCode);
@@ -73,21 +70,9 @@ const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
         body: jsonData,
       }
     );
+
+    setToScan(false);
   }, [result]);
-
-  useEffect(() => {
-    if (playSound) {
-      const audioElement = new Audio("/sounds/valid.mp3");
-
-      audioElement.onloadeddata = () => {
-        audioElement.play();
-      };
-
-      audioElement.onended = () => {
-        setPlaySound(false);
-      };
-    }
-  }, [playSound]);
 
   return (
     <>

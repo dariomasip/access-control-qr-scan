@@ -6,7 +6,7 @@ import Scanner from "./pages/Scanner";
 import ScanResult from "./pages/ScanResult";
 
 function App() {
-  const [result, setResult] = useState();
+  const [result, setResult] = useState("PV-PBYN66");
   const [validCodes, setValidCodes] = useState([]);
   const [recordsCodes, setRecordsCodes] = useState([]);
   const [toScan, setToScan] = useState(false);
