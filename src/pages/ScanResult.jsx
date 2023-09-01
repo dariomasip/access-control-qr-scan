@@ -12,7 +12,7 @@ const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
     const isUniqueCode = recordsCodes.some((item) => item.code === result);
 
     const currentDate = new Date();
-    const limitDate = new Date("2023-09-01 01:30:00");
+    const limitDate = new Date("2023-09-02 01:30:59");
 
     const newValidationCode = [
       { type: "valid", validated: isValidCode },
