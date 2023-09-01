@@ -12,6 +12,10 @@ const Scanner = ({ setResult, setToScan }) => {
     navigate("/scan-result");
   };
 
+  useEffect(() => {
+    setToScan(true);
+  }, []);
+
   return (
     <>
       <QrScanner

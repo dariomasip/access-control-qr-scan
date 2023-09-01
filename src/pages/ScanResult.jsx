@@ -4,11 +4,9 @@ import "./ScanResult.css";
 const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
   const [validationCode, setValidationCode] = useState([{}]);
   const [isValidCode, setValidCode] = useState(null);
-  const [type, setType] = useState();
-  console.log("🚀 ~ file: ScanResult.jsx:8 ~ ScanResult ~ type:", type);
 
   useEffect(() => {
-    setToScan(true);
+    setToScan(false);
 
     const isValidCode = validCodes.find((item) => item.code === result);
     const isUniqueCode = recordsCodes.some((item) => item.code === result);
@@ -70,8 +68,6 @@ const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
         body: jsonData,
       }
     );
-
-    setToScan(false);
   }, [result]);
 
   return (
