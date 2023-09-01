@@ -4,6 +4,7 @@ import "./ScanResult.css";
 const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
   const [validationCode, setValidationCode] = useState([{}]);
   const [isValidCode, setValidCode] = useState(null);
+  const [playSound, setPlaySound] = useState(false);
 
   useEffect(() => {
     setToScan(false);
@@ -21,6 +22,10 @@ const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
     ];
 
     const validCode = newValidationCode.every((item) => item.validated);
+
+    if (validCode) {
+      setPlaySound(true);
+    }
 
     setValidationCode(newValidationCode);
     setValidCode(validCode);
@@ -69,6 +74,17 @@ const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
       }
     );
   }, [result]);
+
+  useEffect(() => {
+    if (playSound) {
+      const audioElement = new Audio("/sounds/valid.mp3");
+      audioElement.play();
+
+      audioElement.onended = () => {
+        setPlaySound(false);
+      };
+    }
+  }, [playSound]);
 
   return (
     <>
