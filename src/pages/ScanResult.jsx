@@ -78,7 +78,10 @@ const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
   useEffect(() => {
     if (playSound) {
       const audioElement = new Audio("/sounds/valid.mp3");
-      audioElement.play();
+
+      audioElement.onloadeddata = () => {
+        audioElement.play();
+      };
 
       audioElement.onended = () => {
         setPlaySound(false);
