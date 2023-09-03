@@ -29,7 +29,7 @@
 }
 
 .nav-contenedor__nav-item:nth-child(3)>img {
-    background-color: #E0BE38;
+    background: linear-gradient(to left, #F9E687, #B59233);
     padding: .6rem;
     border-radius: 2ch;
     transform: translateY(-1rem);

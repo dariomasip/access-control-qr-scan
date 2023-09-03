@@ -29,16 +29,16 @@ const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
     for (const iterator of newValidationCode) {
       if (!iterator.validated) {
         switch (iterator.type) {
-          case "unique":
-            reason = "code_already_scanned";
-            break;
-
           case "valid":
             reason = "code_not_found";
             break;
 
           case "inAnHour":
             reason = "overtime";
+            break;
+
+          case "unique":
+            reason = "code_already_scanned";
             break;
 
           default:

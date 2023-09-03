@@ -2,14 +2,16 @@
   {
     "name": "Inicio",
     "iconSrc": "/icons/home.svg",
+    "iconSrcActive": "/icons/home-active.svg",
     "disabled": false,
     "path": "/"
   },
   {
     "name": "Actividad",
     "iconSrc": "/icons/history.svg",
+    "iconSrcActive": "/icons/history-active.svg",
     "disabled": false,
-    "path": "/"
+    "path": "/actividad"
   },
   {
     "name": "Escanear",

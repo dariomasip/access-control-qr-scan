@@ -1,9 +1,11 @@
 import React from "react";
 import "./Menu.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import ItemsMenu from "../data/Menu.json";
 
 const Menu = () => {
+  const location = useLocation();
+
   return (
     <div className="contenedor__nav-contenedor">
       <nav className="nav-contenedor">
@@ -11,10 +13,15 @@ const Menu = () => {
           <NavLink
             key={index}
             to={item.path}
+            style={item.disabled ? { opacity: ".6" } : null}
             className="nav-contenedor__nav-item">
             <img
               className="nav-contenedor__nav-item__icon"
-              src={item.iconSrc}
+              src={
+                location.pathname === item.path
+                  ? item.iconSrcActive
+                  : item.iconSrc
+              }
               alt="NAV"
             />
             {!(item.name === "Escanear") && (
