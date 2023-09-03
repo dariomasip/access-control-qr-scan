@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Menu from "./components/Menu";
 import Scanner from "./pages/Scanner";
 import ScanResult from "./pages/ScanResult";
+import Activity from "./pages/Activity";
 
 function App() {
   const [result, setResult] = useState("PV-PBYN66");
@@ -89,6 +90,10 @@ function App() {
                 setToScan={setToScan}
               />
             }></Route>
+          <Route
+            exact
+            path="/actividad"
+            element={<Activity recordsCodes={recordsCodes} />}></Route>
         </Routes>
         <Menu setResult={setResult} />
       </BrowserRouter>

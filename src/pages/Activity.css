@@ -1,0 +1,31 @@
+.activity-contenedor {
+    height: 91vh;
+    overflow: auto;
+}
+
+.activity-contenedor__searcher {
+    margin-bottom: 1rem;
+    margin-top: .8rem;
+    position: sticky;
+    top: 0;
+    background-color: #0C0C02;
+    width: 100%;
+    padding: .5rem .8rem;
+}
+
+.activity-contenedor__searcher input {
+    width: 100%;
+    background-color: #1A1A11;
+    border: none;
+    border-radius: 50ch;
+    padding: 1rem 1.4rem;
+    outline: none;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.activity-contenedor__list {
+    padding: 0 .8rem;
+    height: 75%;
+    display: grid;
+}

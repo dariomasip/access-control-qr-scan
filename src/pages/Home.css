@@ -3,6 +3,7 @@
     margin-top: .8rem;
     display: grid;
     row-gap: 1.1rem;
+    max-height: 91vh;
 }
 
 .foreground-contenedor {
@@ -82,6 +83,7 @@
 .home-contenedor__activity__header__action {
     font-weight: 600;
     color: #E0BE38;
+    text-decoration: none;
 }
 
 .home-contenedor__activity__items__item__reason {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Home.css";
-import moment from "moment/moment";
+import ItemActivity from "../components/ItemActivity/ItemActivity";
+import { Link } from "react-router-dom";
 
 const Home = ({ validCodes, recordsCodes }) => {
   const [validCodesRecords, setValidCodesRecords] = useState([]);
@@ -47,7 +48,7 @@ const Home = ({ validCodes, recordsCodes }) => {
           </h3>
           <div className="home-contenedor__main-content__porcentil__value">
             <span>
-              {Math.floor((validCodesRecords.length / validCodes.length) * 100)}
+              {Math.round((validCodesRecords.length / validCodes.length) * 100)}
               %
             </span>
           </div>
@@ -76,50 +77,16 @@ const Home = ({ validCodes, recordsCodes }) => {
           <h3 className="home-contenedor__activity__header__title">
             Última actividad
           </h3>
-          <span className="home-contenedor__activity__header__action">
+          <Link
+            to="/actividad"
+            className="home-contenedor__activity__header__action">
             VER TODO
-          </span>
+          </Link>
         </div>
         <div className="home-contenedor__activity__items">
           {recordsCodes.length > 0 ? (
             recordsCodes
-              .map((item, key) => (
-                <div
-                  key={key}
-                  className="home-contenedor__activity__items__item">
-                  <div>
-                    <p className="home-contenedor__activity__items__item__leyend">
-                      Se escaneó el código{" "}
-                      <span style={{ color: "#E0BE38" }}>{item.code}</span>
-                      <br />
-                      <small className="home-contenedor__activity__items__item__reason">
-                        {item.reason === "code_not_found" &&
-                          "El código no existe."}
-                        {item.reason === "code_already_scanned" &&
-                          "El código ya fue escaneado antes."}
-                        {item.reason === "overtime" &&
-                          "Escaneado fuera de la hora estipulada."}
-                      </small>
-                    </p>
-                  </div>
-                  <div>
-                    <p className="home-contenedor__activity__items__item__info">
-                      <span
-                        style={
-                          item.status === "valid"
-                            ? { color: "#5AA55D" }
-                            : { color: "#C94545" }
-                        }>
-                        {item.status === "valid" ? "Válido" : "Inválido"}
-                      </span>{" "}
-                      • <span>{item.type}</span> •{" "}
-                      <span>
-                        {moment(item.validatedAt).format("D/MM HH:mm")}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              ))
+              .map((item, key) => <ItemActivity recordCode={item} key={key} />)
               .reverse()
               .slice(0, 5)
           ) : (
