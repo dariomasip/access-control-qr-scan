@@ -1,70 +1,62 @@
-# Getting Started with Create React App
+# Guest Access Control with QR Code Scanning
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a web application that allows controlling guest access to an event through QR code scanning. The application provides an efficient and secure solution to ensure that only authorized individuals can enter the event.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **QR Code Scanning**: The application can scan QR codes and process them.
 
-### `npm start`
+- **Database Validation**: It verifies if the scanned code exists in the database.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Previous Scan Validation**: It ensures that the code has not been scanned before.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Time Validation**: It checks if the code was scanned within a specified time frame.
 
-### `npm test`
+- **Report Generation**: As codes are scanned, it generates a report of quantities by QR code type.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **View Scan Activity**: It allows viewing the activity of scanned codes.
 
-### `npm run build`
+## Technologies Used
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **React.js**: Used to build the user interface and manage application state.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Node.js with Express**: Used to create the backend server that interacts with the database and serves the application.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **MongoDB**: Used as the database to store guest information and access records.
 
-### `npm run eject`
+- **HTML/CSS**: Used for layout and interface design.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Deployment
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+To deploy the application, follow these steps:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. Run the command:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+npm install
+```
 
-## Learn More
+2. Create a .env file in the project's root directory with the following environment variables:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+REACT_APP_BASE_URL=[Your_API_URL]
+REACT_APP_TOKEN=[Your_token]
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Make sure to replace [Your_API_URL] and [Your_token] with your API URL and authorization token, respectively.
 
-### Code Splitting
+3. Deploy the application on your preferred server or platform using the files generated in the build folder.
+   \
+   The application will be available for public use after these steps.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Backend
 
-### Analyzing the Bundle Size
+The backend for this application can be found at https://github.com/dariomasip/elchetostaff-server.git.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Author
 
-### Making a Progressive Web App
+[Darío Masip](https://github.com/dariomasip)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Contact
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+If you have any questions or comments about the project, feel free to contact me at masipdario@gmail.com or through my [LinkedIn](www.linkedin.com/in/dariomasip).
