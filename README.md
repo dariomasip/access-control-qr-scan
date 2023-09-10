@@ -59,4 +59,4 @@ The backend for this application can be found at https://github.com/dariomasip/e
 
 ## Contact
 
-If you have any questions or comments about the project, feel free to contact me at masipdario@gmail.com or through my [LinkedIn](www.linkedin.com/in/dariomasip).
+If you have any questions or comments about the project, feel free to contact me at masipdario@gmail.com or through my [LinkedIn](https://www.linkedin.com/in/dariomasip).
