@@ -45,7 +45,13 @@ REACT_APP_TOKEN=[Your_token]
 
 Make sure to replace [Your_API_URL] and [Your_token] with your API URL and authorization token, respectively.
 
-3. Deploy the application on your preferred server or platform using the files generated in the build folder.
+3. Generate an optimized production build of the application with the following command:
+
+```bash
+npm run build
+```
+
+4. Deploy the application on your preferred server or platform using the files generated in the build folder.
    \
    The application will be available for public use after these steps.
 
