@@ -7,12 +7,14 @@ const ScanResult = ({
   recordsCodes,
   setToScan,
   setRecordsCodes,
+  socket,
 }) => {
   const [validationCode, setValidationCode] = useState([{}]);
   const [isValidCode, setValidCode] = useState(null);
   const [codeScanned, setCodeScanned] = useState();
 
   useEffect(() => {
+    console.log("🚀 ~ file: ScanResult.jsx:12 ~ socket:", socket);
     setToScan(false);
 
     const isValidCode = validCodes.find((item) => item.code === result);
@@ -88,6 +90,8 @@ const ScanResult = ({
         "registrationCodes",
         JSON.stringify(newRecordLocalStorage)
       );
+
+      socket.emit("record_code", "Código escaneado.");
     });
   }, [result]);
 

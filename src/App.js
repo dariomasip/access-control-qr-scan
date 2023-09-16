@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
+import io from "socket.io-client";
 import Home from "./pages/Home";
 import Menu from "./components/Menu";
 import Scanner from "./pages/Scanner";
@@ -7,6 +8,30 @@ import ScanResult from "./pages/ScanResult";
 import Activity from "./pages/Activity";
 
 function App() {
+  const socket = io(`${process.env.REACT_APP_BASE_URL}`);
+
+  useEffect(() => {
+    // Maneja eventos o acciones cuando se conecta al servidor
+    socket.on("connect", () => {
+      console.log("Conectado al servidor Socket.IO");
+    });
+
+    socket.on("fetch_data", () => {
+      fetchValidCodes("6503c865ae3abd2b003bb970");
+      fetchRegistrationCodes("6503c865ae3abd2b003bb970");
+    });
+
+    // Maneja eventos cuando se desconecta del servidor
+    socket.on("disconnect", () => {
+      console.log("Desconectado del servidor Socket.IO");
+    });
+
+    // Importante: asegúrate de cerrar la conexión cuando el componente se desmonte
+    return () => {
+      socket.disconnect();
+    };
+  }, [socket]);
+
   const [result, setResult] = useState("");
   const [validCodes, setValidCodes] = useState([]);
   const [recordsCodes, setRecordsCodes] = useState([]);
@@ -99,6 +124,7 @@ function App() {
                 recordsCodes={recordsCodes}
                 setToScan={setToScan}
                 setRecordsCodes={setRecordsCodes}
+                socket={socket}
               />
             }></Route>
           <Route
