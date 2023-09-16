@@ -98,6 +98,7 @@ function App() {
                 validCodes={validCodes}
                 recordsCodes={recordsCodes}
                 setToScan={setToScan}
+                setRecordsCodes={setRecordsCodes}
               />
             }></Route>
           <Route

@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./ScanResult.css";
 
-const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
+const ScanResult = ({
+  result,
+  validCodes,
+  recordsCodes,
+  setToScan,
+  setRecordsCodes,
+}) => {
   const [validationCode, setValidationCode] = useState([{}]);
   const [isValidCode, setValidCode] = useState(null);
   const [codeScanned, setCodeScanned] = useState();
@@ -75,6 +81,8 @@ const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
         ...JSON.parse(registrationCodesLocalStorage),
         newRecordCode,
       ];
+
+      setRecordsCodes(newRecordLocalStorage);
 
       localStorage.setItem(
         "registrationCodes",
