@@ -11,6 +11,10 @@ const Home = ({ validCodes, recordsCodes }) => {
     const v = recordsCodes.filter((item) => item.status === "valid");
     setValidCodesRecords(v);
 
+    const statsIx10 = recordsCodes.filter(
+      (item) => item.status === "valid" && item.type === "Ix10"
+    );
+
     const statsPV = recordsCodes.filter(
       (item) => item.status === "valid" && item.type === "Palco VIP"
     );
@@ -23,10 +27,30 @@ const Home = ({ validCodes, recordsCodes }) => {
       (item) => item.status === "valid" && item.type === "Hombre"
     );
 
+    const statsX10 = recordsCodes.filter(
+      (item) => item.status === "valid" && item.type === "x10"
+    );
+
+    const statsX15 = recordsCodes.filter(
+      (item) => item.status === "valid" && item.type === "x15"
+    );
+
+    const statsX20 = recordsCodes.filter(
+      (item) => item.status === "valid" && item.type === "x20"
+    );
+
+    const statsX30 = recordsCodes.filter(
+      (item) => item.status === "valid" && item.type === "x30"
+    );
+
     setStats([
       {
-        type: "Palco VIP",
+        type: "Invitación VIP",
         cantidad: statsPV.length,
+      },
+      {
+        type: "Invitación Especial",
+        cantidad: statsIx10.length,
       },
       {
         type: "Mujer",
@@ -35,6 +59,22 @@ const Home = ({ validCodes, recordsCodes }) => {
       {
         type: "Hombre",
         cantidad: statsH.length,
+      },
+      {
+        type: "x10",
+        cantidad: statsX10.length,
+      },
+      {
+        type: "x15",
+        cantidad: statsX15.length,
+      },
+      {
+        type: "x20",
+        cantidad: statsX20.length,
+      },
+      {
+        type: "x30",
+        cantidad: statsX30.length,
       },
     ]);
   }, [recordsCodes]);

@@ -4,19 +4,19 @@ import "./ScanResult.css";
 const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
   const [validationCode, setValidationCode] = useState([{}]);
   const [isValidCode, setValidCode] = useState(null);
+  const [codeScanned, setCodeScanned] = useState();
 
   useEffect(() => {
     setToScan(false);
 
     const isValidCode = validCodes.find((item) => item.code === result);
-    const isUniqueCode = recordsCodes.some((item) => item.code === result);
-
-    const currentDate = new Date();
-    const limitDate = new Date("2023-09-02 01:30:59");
+    setCodeScanned(isValidCode);
+    const isUniqueCode = recordsCodes.some(
+      (item) => item.code === result && item?.reason !== "code_not_found"
+    );
 
     const newValidationCode = [
       { type: "valid", validated: isValidCode },
-      { type: "inAnHour", validated: !(currentDate > limitDate) },
       { type: "unique", validated: !isUniqueCode },
     ];
 
@@ -58,7 +58,7 @@ const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
     const jsonData = JSON.stringify(newRecordCode);
 
     fetch(
-      `${process.env.REACT_APP_BASE_URL}/api/v1.0/codes/add-record/64effa691db394b49e4685f6`,
+      `${process.env.REACT_APP_BASE_URL}/api/v1.0/codes/add-record/6503c865ae3abd2b003bb970`,
       {
         method: "POST",
         headers: {
@@ -67,7 +67,20 @@ const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
         },
         body: jsonData,
       }
-    );
+    ).then(() => {
+      const registrationCodesLocalStorage =
+        localStorage.getItem("registrationCodes");
+
+      const newRecordLocalStorage = [
+        ...JSON.parse(registrationCodesLocalStorage),
+        newRecordCode,
+      ];
+
+      localStorage.setItem(
+        "registrationCodes",
+        JSON.stringify(newRecordLocalStorage)
+      );
+    });
   }, [result]);
 
   return (
@@ -84,6 +97,7 @@ const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
                 }
                 alt=""
               />
+              <span style={{ color: "#cacaca" }}>{codeScanned?.type}</span>
             </div>
             <h4
               style={isValidCode ? { color: "#5AA55D" } : { color: "#C94545" }}
@@ -106,8 +120,6 @@ const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
                         {item.type === "valid" && "El código existe."}
                         {item.type === "unique" &&
                           "El código fue escaneado por única vez."}
-                        {item.type === "inAnHour" &&
-                          "Escaneado dentro de la hora estipulada."}
                       </span>
                     </li>
                   ) : (
@@ -119,8 +131,6 @@ const ScanResult = ({ result, validCodes, recordsCodes, setToScan }) => {
                         {item.type === "valid" && "El código no existe."}
                         {item.type === "unique" &&
                           "El código ya fue escaneado antes."}
-                        {item.type === "inAnHour" &&
-                          "Escaneado fuera de la hora estipulada."}
                       </span>
                     </li>
                   )

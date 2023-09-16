@@ -7,7 +7,7 @@ import ScanResult from "./pages/ScanResult";
 import Activity from "./pages/Activity";
 
 function App() {
-  const [result, setResult] = useState("PV-PBYN66");
+  const [result, setResult] = useState("");
   const [validCodes, setValidCodes] = useState([]);
   const [recordsCodes, setRecordsCodes] = useState([]);
   const [toScan, setToScan] = useState(false);
@@ -48,18 +48,28 @@ function App() {
   };
 
   useEffect(() => {
-    console.count(fetchValidCodes);
-    console.count(fetchRegistrationCodes);
-    fetchValidCodes("64effa691db394b49e4685f6");
-    fetchRegistrationCodes("64effa691db394b49e4685f6");
+    const isStoraged = {
+      registrationCodes: localStorage.getItem("registrationCodes"),
+      validCodes: localStorage.getItem("validationCodes"),
+    };
+    if (!(isStoraged.registrationCodes && isStoraged.validCodes)) {
+      fetchValidCodes("6503c865ae3abd2b003bb970");
+      fetchRegistrationCodes("6503c865ae3abd2b003bb970");
+    } else {
+      setRecordsCodes(JSON.parse(isStoraged.registrationCodes));
+      setValidCodes(JSON.parse(isStoraged.validCodes));
+    }
   }, []);
 
   useEffect(() => {
-    if (toScan) {
-      console.count(fetchValidCodes);
-      console.count(fetchRegistrationCodes);
-      fetchValidCodes("64effa691db394b49e4685f6");
-      fetchRegistrationCodes("64effa691db394b49e4685f6");
+    const isStoraged = {
+      registrationCodes: localStorage.getItem("registrationCodes"),
+      validCodes: localStorage.getItem("validationCodes"),
+    };
+
+    if (toScan && !(isStoraged.registrationCodes && isStoraged.validCodes)) {
+      fetchValidCodes("6503c865ae3abd2b003bb970");
+      fetchRegistrationCodes("6503c865ae3abd2b003bb970");
     }
   }, [toScan]);
 

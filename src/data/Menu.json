@@ -16,6 +16,7 @@
   {
     "name": "Escanear",
     "iconSrc": "/icons/qr_code.svg",
+    "iconSrcActive": "/icons/qr_code.svg",
     "disabled": false,
     "path": "/scan"
   },
