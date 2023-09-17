@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
+import { useSocket } from "./contexts/SocketContext";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import io from "socket.io-client";
 import Home from "./pages/Home";
 import Menu from "./components/Menu";
 import Scanner from "./pages/Scanner";
@@ -8,7 +8,7 @@ import ScanResult from "./pages/ScanResult";
 import Activity from "./pages/Activity";
 
 function App() {
-  const socket = io(`${process.env.REACT_APP_BASE_URL}`);
+  const socket = useSocket();
 
   useEffect(() => {
     // Maneja eventos o acciones cuando se conecta al servidor
