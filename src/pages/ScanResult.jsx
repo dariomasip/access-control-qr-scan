@@ -66,7 +66,7 @@ const ScanResult = ({
     const jsonData = JSON.stringify(newRecordCode);
 
     fetch(
-      `${process.env.REACT_APP_BASE_URL}/api/v1.0/codes/add-record/6503c865ae3abd2b003bb970`,
+      `${process.env.REACT_APP_BASE_URL}/api/v1.0/codes/add-record/650db5f8b724d3def45c1f6b`,
       {
         method: "POST",
         headers: {

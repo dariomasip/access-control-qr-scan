@@ -17,8 +17,8 @@ function App() {
     });
 
     socket.on("fetch_data", () => {
-      fetchValidCodes("6503c865ae3abd2b003bb970");
-      fetchRegistrationCodes("6503c865ae3abd2b003bb970");
+      fetchValidCodes("650db5f8b724d3def45c1f6b");
+      fetchRegistrationCodes("650db5f8b724d3def45c1f6b");
     });
 
     // Maneja eventos cuando se desconecta del servidor
@@ -78,8 +78,8 @@ function App() {
       validCodes: localStorage.getItem("validationCodes"),
     };
     if (!(isStoraged.registrationCodes && isStoraged.validCodes)) {
-      fetchValidCodes("6503c865ae3abd2b003bb970");
-      fetchRegistrationCodes("6503c865ae3abd2b003bb970");
+      fetchValidCodes("650db5f8b724d3def45c1f6b");
+      fetchRegistrationCodes("650db5f8b724d3def45c1f6b");
     } else {
       setRecordsCodes(JSON.parse(isStoraged.registrationCodes));
       setValidCodes(JSON.parse(isStoraged.validCodes));
@@ -93,8 +93,8 @@ function App() {
     };
 
     if (toScan && !(isStoraged.registrationCodes && isStoraged.validCodes)) {
-      fetchValidCodes("6503c865ae3abd2b003bb970");
-      fetchRegistrationCodes("6503c865ae3abd2b003bb970");
+      fetchValidCodes("650db5f8b724d3def45c1f6b");
+      fetchRegistrationCodes("650db5f8b724d3def45c1f6b");
     }
   }, [toScan]);
 
