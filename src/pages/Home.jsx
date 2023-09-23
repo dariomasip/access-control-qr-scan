@@ -27,12 +27,12 @@ const Home = ({ validCodes, recordsCodes }) => {
       (item) => item.status === "valid" && item.type === "Hombre"
     );
 
-    const statsX10 = recordsCodes.filter(
-      (item) => item.status === "valid" && item.type === "x10"
+    const statsX5 = recordsCodes.filter(
+      (item) => item.status === "valid" && item.type === "Ix5"
     );
 
-    const statsX15 = recordsCodes.filter(
-      (item) => item.status === "valid" && item.type === "x15"
+    const statsX10 = recordsCodes.filter(
+      (item) => item.status === "valid" && item.type === "Ix10"
     );
 
     const statsX20 = recordsCodes.filter(
@@ -65,8 +65,8 @@ const Home = ({ validCodes, recordsCodes }) => {
         cantidad: statsX10.length,
       },
       {
-        type: "x15",
-        cantidad: statsX15.length,
+        type: "x5",
+        cantidad: statsX5.length,
       },
       {
         type: "x20",
