@@ -8,73 +8,76 @@ const Home = ({ validCodes, recordsCodes }) => {
   const [stats, setStats] = useState([]);
 
   useEffect(() => {
-    const v = recordsCodes.filter((item) => item.status === "valid");
+    const v = recordsCodes?.filter((item) => item.status === "valid");
     setValidCodesRecords(v);
 
-    const statsIx10 = recordsCodes.filter(
-      (item) => item.status === "valid" && item.type === "Ix10"
-    );
-
-    const statsPV = recordsCodes.filter(
-      (item) => item.status === "valid" && item.type === "Palco VIP"
-    );
-
-    const statsM = recordsCodes.filter(
+    const statsM = recordsCodes?.filter(
       (item) => item.status === "valid" && item.type === "Mujer"
     );
 
-    const statsH = recordsCodes.filter(
+    const statsH = recordsCodes?.filter(
       (item) => item.status === "valid" && item.type === "Hombre"
     );
 
-    const statsX5 = recordsCodes.filter(
-      (item) => item.status === "valid" && item.type === "Ix5"
+    const statsX5 = recordsCodes?.filter(
+      (item) => item.status === "valid" && item.type === "Invitación X5"
     );
 
-    const statsX10 = recordsCodes.filter(
-      (item) => item.status === "valid" && item.type === "Ix10"
+    const statsX10 = recordsCodes?.filter(
+      (item) => item.status === "valid" && item.type === "Invitación X10"
     );
 
-    const statsX20 = recordsCodes.filter(
-      (item) => item.status === "valid" && item.type === "x20"
+    const statsGlenda = recordsCodes?.filter(
+      (item) => item.status === "valid" && item.user === "Glenda Roque"
     );
 
-    const statsX30 = recordsCodes.filter(
-      (item) => item.status === "valid" && item.type === "x30"
+    const statsFabio = recordsCodes?.filter(
+      (item) => item.status === "valid" && item.user === "Fabio Gomez"
+    );
+
+    const statsRomina = recordsCodes?.filter(
+      (item) => item.status === "valid" && item.user === "Romina Roque"
+    );
+    const statsCarla = recordsCodes?.filter(
+      (item) => item.status === "valid" && item.user === "Carla Gomez"
     );
 
     setStats([
       {
-        type: "Invitación VIP",
-        cantidad: statsPV.length,
-      },
-      {
-        type: "Invitación Especial",
-        cantidad: statsIx10.length,
-      },
-      {
         type: "Mujer",
-        cantidad: statsM.length,
+        cantidad: statsM?.length,
       },
       {
         type: "Hombre",
-        cantidad: statsH.length,
+        cantidad: statsH?.length,
       },
       {
-        type: "x10",
-        cantidad: statsX10.length,
+        type: "Invitación X5",
+        cantidad: statsX5?.length,
       },
       {
-        type: "x5",
-        cantidad: statsX5.length,
+        type: "Invitación X10",
+        cantidad: statsX10?.length,
       },
       {
-        type: "x20",
-        cantidad: statsX20.length,
+        type: "Glenda Perez",
+        userStatistics: true,
+        cantidad: statsGlenda?.length,
       },
       {
-        type: "x30",
-        cantidad: statsX30.length,
+        type: "Fabio Gomez",
+        userStatistics: true,
+        cantidad: statsFabio?.length,
+      },
+      {
+        type: "Romina Roque",
+        userStatistics: true,
+        cantidad: statsRomina?.length,
+      },
+      {
+        type: "Carla Gomez",
+        userStatistics: true,
+        cantidad: statsCarla?.length,
       },
     ]);
   }, [recordsCodes]);
@@ -88,29 +91,45 @@ const Home = ({ validCodes, recordsCodes }) => {
           </h3>
           <div className="home-contenedor__main-content__porcentil__value">
             <span>
-              {Math.round((validCodesRecords.length / validCodes.length) * 100)}
+              {Math.round(
+                (validCodesRecords?.length / validCodes?.length) * 100
+              )}
               %
             </span>
           </div>
         </div>
         <h1>
           <strong>
-            {validCodesRecords.length} / {validCodes.length}
+            {validCodesRecords?.length} / {validCodes?.length}
           </strong>
         </h1>
       </div>
       <div className="home-contenedor__stats">
-        {stats.map((item, key) => (
-          <div
-            key={key}
-            className="home-contenedor__stats__item foreground-contenedor">
-            <span>{item.type}</span>
-            <h2>
-              {item.cantidad} (
-              {Math.round((item.cantidad / validCodesRecords.length) * 100)}%)
-            </h2>
-          </div>
-        ))}
+        {stats.map((item, key) =>
+          !item.userStatistics ? (
+            <div
+              key={key}
+              className="home-contenedor__stats__item foreground-contenedor">
+              <span>{item.type}</span>
+              <h2>
+                {item.cantidad} (
+                {Math.round((item.cantidad / validCodesRecords?.length) * 100)}
+                %)
+              </h2>
+            </div>
+          ) : (
+            <div
+              key={key}
+              className="home-contenedor__stats__item foreground-contenedor">
+              <span>{item.type}</span>
+              <h2>
+                {item.cantidad} (
+                {Math.round((item.cantidad / validCodesRecords?.length) * 100)}
+                %)
+              </h2>
+            </div>
+          )
+        )}
       </div>
       <div className="home-contenedor__activity foreground-contenedor">
         <div className="home-contenedor__activity__header">
@@ -124,7 +143,7 @@ const Home = ({ validCodes, recordsCodes }) => {
           </Link>
         </div>
         <div className="home-contenedor__activity__items">
-          {recordsCodes.length > 0 ? (
+          {recordsCodes?.length > 0 ? (
             recordsCodes
               .map((item, key) => <ItemActivity recordCode={item} key={key} />)
               .reverse()

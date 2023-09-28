@@ -5,18 +5,15 @@ const ScanResult = ({
   result,
   validCodes,
   recordsCodes,
-  setToScan,
   setRecordsCodes,
   socket,
+  currentConcert,
 }) => {
   const [validationCode, setValidationCode] = useState([{}]);
   const [isValidCode, setValidCode] = useState(null);
   const [codeScanned, setCodeScanned] = useState();
 
   useEffect(() => {
-    console.log("🚀 ~ file: ScanResult.jsx:12 ~ socket:", socket);
-    setToScan(false);
-
     const isValidCode = validCodes.find((item) => item.code === result);
     setCodeScanned(isValidCode);
     const isUniqueCode = recordsCodes.some(
@@ -59,6 +56,7 @@ const ScanResult = ({
       code: result,
       status: validCode ? "valid" : "invalid",
       type: isValidCode?.type,
+      user: isValidCode?.user,
       validatedAt: new Date(),
       reason: reason || null,
     };
@@ -66,7 +64,7 @@ const ScanResult = ({
     const jsonData = JSON.stringify(newRecordCode);
 
     fetch(
-      `${process.env.REACT_APP_BASE_URL}/api/v1.0/codes/add-record/650db5f8b724d3def45c1f6b`,
+      `${process.env.REACT_APP_BASE_URL}/api/v1.0/codes/add-record/${currentConcert}`,
       {
         method: "POST",
         headers: {
@@ -91,6 +89,29 @@ const ScanResult = ({
         JSON.stringify(newRecordLocalStorage)
       );
 
+      const newDateUpdated = {
+        updateAt: new Date(),
+      };
+
+      const jsonDataUpdated = JSON.stringify(newDateUpdated);
+
+      fetch(
+        `${process.env.REACT_APP_BASE_URL}/api/v1.0/concerts/update-at/${currentConcert}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `bearer ${process.env.REACT_APP_TOKEN}`,
+          },
+          body: jsonDataUpdated,
+        }
+      ).then(() => {
+        localStorage.setItem(
+          "updatedAt",
+          JSON.stringify(newDateUpdated.updateAt)
+        );
+      });
+
       socket.emit("record_code", "Código escaneado.");
     });
   }, [result]);
@@ -109,7 +130,10 @@ const ScanResult = ({
                 }
                 alt=""
               />
-              <span style={{ color: "#cacaca" }}>{codeScanned?.type}</span>
+              <span style={{ color: "#cacaca" }}>
+                {codeScanned?.type}
+                <br /> ({codeScanned?.user})
+              </span>
             </div>
             <h4
               style={isValidCode ? { color: "#5AA55D" } : { color: "#C94545" }}

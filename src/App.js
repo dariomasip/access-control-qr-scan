@@ -17,8 +17,8 @@ function App() {
     });
 
     socket.on("fetch_data", () => {
-      fetchValidCodes("650db5f8b724d3def45c1f6b");
-      fetchRegistrationCodes("650db5f8b724d3def45c1f6b");
+      fetchValidCodes(currentConcert);
+      fetchRegistrationCodes(currentConcert);
     });
 
     // Maneja eventos cuando se desconecta del servidor
@@ -32,17 +32,26 @@ function App() {
     };
   }, [socket]);
 
+  const [currentConcert, setCurrentConcert] = useState();
+  const [currentUpdatedAt, setCurrentUpdatedAt] = useState();
   const [result, setResult] = useState("");
   const [validCodes, setValidCodes] = useState([]);
   const [recordsCodes, setRecordsCodes] = useState([]);
   const [toScan, setToScan] = useState(false);
 
-  const fetchValidCodes = (code) => {
-    fetch(`${process.env.REACT_APP_BASE_URL}/api/v1.0/codes/valid/${code}`, {
-      headers: {
-        authorization: `bearer ${process.env.REACT_APP_TOKEN}`,
-      },
-    })
+  const fetchValidCodes = (currentConcert) => {
+    fetch(
+      `${process.env.REACT_APP_BASE_URL}/api/v1.0/codes/valid/${
+        currentConcert
+          ? currentConcert
+          : JSON.parse(localStorage.getItem("currentConcert"))
+      }`,
+      {
+        headers: {
+          authorization: `bearer ${process.env.REACT_APP_TOKEN}`,
+        },
+      }
+    )
       .then((response) => response.json())
       .then((json) => {
         setValidCodes(json.validationCodes);
@@ -53,9 +62,13 @@ function App() {
       });
   };
 
-  const fetchRegistrationCodes = (code) => {
+  const fetchRegistrationCodes = (currentConcert) => {
     fetch(
-      `${process.env.REACT_APP_BASE_URL}/api/v1.0/codes/registration/${code}`,
+      `${process.env.REACT_APP_BASE_URL}/api/v1.0/codes/registration/${
+        currentConcert
+          ? currentConcert
+          : JSON.parse(localStorage.getItem("currentConcert"))
+      }`,
       {
         headers: {
           authorization: `bearer ${process.env.REACT_APP_TOKEN}`,
@@ -72,19 +85,73 @@ function App() {
       });
   };
 
+  const fetchUpdatedAt = (currentConcert) => {
+    fetch(
+      `${process.env.REACT_APP_BASE_URL}/api/v1.0/concerts/update-at/${currentConcert}`,
+      {
+        headers: {
+          authorization: `bearer ${process.env.REACT_APP_TOKEN}`,
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((json) => {
+        setCurrentUpdatedAt(json.updateAt);
+
+        const localUpdatedAt = JSON.parse(localStorage.getItem("updatedAt"));
+        if (json.updateAt !== localUpdatedAt) {
+          fetchRegistrationCodes(currentConcert);
+          fetchValidCodes(currentConcert);
+          localStorage.setItem("updatedAt", JSON.stringify(json.updateAt));
+        }
+      });
+  };
+
+  const updateDataNextConcert = () => {
+    fetch(`${process.env.REACT_APP_BASE_URL}/api/v1.0/concerts/get-next`, {
+      headers: {
+        authorization: `bearer ${process.env.REACT_APP_TOKEN}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        setCurrentConcert(json._id);
+        const localConcert = JSON.parse(localStorage.getItem("currentConcert"));
+
+        if (json._id !== localConcert) {
+          fetchValidCodes(json._id);
+          fetchRegistrationCodes(json._id);
+          localStorage.setItem("currentConcert", JSON.stringify(json._id));
+        }
+      });
+  };
+
+  useEffect(() => {
+    updateDataNextConcert();
+  }, []);
+
+  useEffect(() => {
+    if (currentConcert) {
+      fetchUpdatedAt(currentConcert);
+    }
+  }, [currentConcert]);
+
   useEffect(() => {
     const isStoraged = {
       registrationCodes: localStorage.getItem("registrationCodes"),
       validCodes: localStorage.getItem("validationCodes"),
     };
-    if (!(isStoraged.registrationCodes && isStoraged.validCodes)) {
-      fetchValidCodes("650db5f8b724d3def45c1f6b");
-      fetchRegistrationCodes("650db5f8b724d3def45c1f6b");
+    if (
+      !(isStoraged.registrationCodes && isStoraged.validCodes) &&
+      currentConcert
+    ) {
+      fetchValidCodes(currentConcert);
+      fetchRegistrationCodes(currentConcert);
     } else {
       setRecordsCodes(JSON.parse(isStoraged.registrationCodes));
       setValidCodes(JSON.parse(isStoraged.validCodes));
     }
-  }, []);
+  }, [currentConcert]);
 
   useEffect(() => {
     const isStoraged = {
@@ -93,8 +160,8 @@ function App() {
     };
 
     if (toScan && !(isStoraged.registrationCodes && isStoraged.validCodes)) {
-      fetchValidCodes("650db5f8b724d3def45c1f6b");
-      fetchRegistrationCodes("650db5f8b724d3def45c1f6b");
+      fetchValidCodes(currentConcert);
+      fetchRegistrationCodes(currentConcert);
     }
   }, [toScan]);
 
@@ -125,6 +192,7 @@ function App() {
                 setToScan={setToScan}
                 setRecordsCodes={setRecordsCodes}
                 socket={socket}
+                currentConcert={currentConcert}
               />
             }></Route>
           <Route

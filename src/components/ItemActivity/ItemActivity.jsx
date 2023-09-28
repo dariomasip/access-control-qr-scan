@@ -28,7 +28,7 @@ const ItemActivity = ({ recordCode }) => {
             }>
             {recordCode.status === "valid" ? "Válido" : "Inválido"}
           </span>{" "}
-          • <span>{recordCode.type}</span> •{" "}
+          • <span>{recordCode.type}</span> • <span>{recordCode.user}</span> •{" "}
           <span>{moment(recordCode.validatedAt).format("D/MM HH:mm")}</span>
         </p>
       </div>

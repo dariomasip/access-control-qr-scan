@@ -26,6 +26,5 @@
 
 .activity-contenedor__list {
     padding: 0 .8rem;
-    height: 75%;
     display: grid;
 }
