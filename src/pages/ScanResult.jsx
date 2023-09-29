@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./ScanResult.css";
+import ItemActivity from "../components/ItemActivity/ItemActivity";
 
 const ScanResult = ({
   result,
@@ -12,8 +13,10 @@ const ScanResult = ({
   const [validationCode, setValidationCode] = useState([{}]);
   const [isValidCode, setValidCode] = useState(null);
   const [codeScanned, setCodeScanned] = useState();
+  const [isNotUnique, setNotUnique] = useState();
 
   useEffect(() => {
+    setNotUnique(null);
     const isValidCode = validCodes.find((item) => item.code === result);
     setCodeScanned(isValidCode);
     const isUniqueCode = recordsCodes.some(
@@ -44,6 +47,7 @@ const ScanResult = ({
 
           case "unique":
             reason = "code_already_scanned";
+            setNotUnique(isValidCode);
             break;
 
           default:
@@ -177,6 +181,11 @@ const ScanResult = ({
                 )}
               </ul>
             </div>
+            {isNotUnique && (
+              <div className="result-contenedor__main__isnotuniquecode">
+                <ItemActivity recordCode={isNotUnique} />
+              </div>
+            )}
           </div>
         </div>
       )}
