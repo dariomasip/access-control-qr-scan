@@ -41,6 +41,9 @@ const Home = ({ validCodes, recordsCodes }) => {
     const statsCarla = recordsCodes?.filter(
       (item) => item.status === "valid" && item.user === "Carla Gomez"
     );
+    const statsLeandro = recordsCodes?.filter(
+      (item) => item.status === "valid" && item.user === "Leandro De Yulis"
+    );
 
     setStats([
       {
@@ -61,23 +64,23 @@ const Home = ({ validCodes, recordsCodes }) => {
       },
       {
         type: "Glenda Perez",
-        userStatistics: true,
         cantidad: statsGlenda?.length,
       },
       {
         type: "Fabio Gomez",
-        userStatistics: true,
         cantidad: statsFabio?.length,
       },
       {
         type: "Romina Roque",
-        userStatistics: true,
         cantidad: statsRomina?.length,
       },
       {
         type: "Carla Gomez",
-        userStatistics: true,
         cantidad: statsCarla?.length,
+      },
+      {
+        type: "Leandro De Yulis",
+        cantidad: statsLeandro?.length,
       },
     ]);
   }, [recordsCodes]);
@@ -105,31 +108,18 @@ const Home = ({ validCodes, recordsCodes }) => {
         </h1>
       </div>
       <div className="home-contenedor__stats">
-        {stats.map((item, key) =>
-          !item.userStatistics ? (
-            <div
-              key={key}
-              className="home-contenedor__stats__item foreground-contenedor">
-              <span>{item.type}</span>
-              <h2>
-                {item.cantidad} (
-                {Math.round((item.cantidad / validCodesRecords?.length) * 100)}
-                %)
-              </h2>
-            </div>
-          ) : (
-            <div
-              key={key}
-              className="home-contenedor__stats__item foreground-contenedor">
-              <span>{item.type}</span>
-              <h2>
-                {item.cantidad} (
-                {Math.round((item.cantidad / validCodesRecords?.length) * 100)}
-                %)
-              </h2>
-            </div>
-          )
-        )}
+        {stats.map((item, key) => (
+          <div
+            key={key}
+            className="home-contenedor__stats__item foreground-contenedor">
+            <span>{item.type}</span>
+            <h2>
+              {item.cantidad} (
+              {Math.round((item.cantidad / validCodesRecords?.length) * 100)}
+              %)
+            </h2>
+          </div>
+        ))}
       </div>
       <div className="home-contenedor__activity foreground-contenedor">
         <div className="home-contenedor__activity__header">
