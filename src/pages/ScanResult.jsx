@@ -96,7 +96,11 @@ const ScanResult = ({
       const jsonDataUpdated = JSON.stringify(newDateUpdated);
 
       fetch(
-        `${process.env.REACT_APP_BASE_URL}/api/v1.0/concerts/update-at/${currentConcert}`,
+        `${process.env.REACT_APP_BASE_URL}/api/v1.0/concerts/update-at/${
+          currentConcert
+            ? currentConcert
+            : JSON.parse(localStorage.getItem("currentConcert"))
+        }`,
         {
           method: "POST",
           headers: {
