@@ -19,7 +19,7 @@ const ScanResult = ({
     setNotUnique(null);
     const isValidCode = validCodes.find((item) => item.code === result);
     setCodeScanned(isValidCode);
-    const isUniqueCode = recordsCodes.some(
+    const isUniqueCode = recordsCodes.find(
       (item) => item.code === result && item?.reason !== "code_not_found"
     );
 
@@ -47,7 +47,7 @@ const ScanResult = ({
 
           case "unique":
             reason = "code_already_scanned";
-            setNotUnique(isValidCode);
+            setNotUnique(isUniqueCode);
             break;
 
           default:
@@ -182,7 +182,9 @@ const ScanResult = ({
               </ul>
             </div>
             {isNotUnique && (
-              <div className="result-contenedor__main__isnotuniquecode">
+              <div
+                style={{ marginTop: "8px" }}
+                className="result-contenedor__main__isnotuniquecode">
                 <ItemActivity recordCode={isNotUnique} />
               </div>
             )}
