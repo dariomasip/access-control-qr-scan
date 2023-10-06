@@ -20,11 +20,11 @@ const Home = ({ validCodes, recordsCodes }) => {
     );
 
     const statsX5 = recordsCodes?.filter(
-      (item) => item.status === "valid" && item.type === "Invitación X5"
+      (item) => item.status === "valid" && item.type === "Palco VIP Hombre"
     );
 
     const statsX10 = recordsCodes?.filter(
-      (item) => item.status === "valid" && item.type === "Invitación X10"
+      (item) => item.status === "valid" && item.type === "Palco VIP Mujer"
     );
 
     const statsGlenda = recordsCodes?.filter(
@@ -55,11 +55,11 @@ const Home = ({ validCodes, recordsCodes }) => {
         cantidad: statsH?.length,
       },
       {
-        type: "Invitación X5",
+        type: "Palco VIP Hombre",
         cantidad: statsX5?.length,
       },
       {
-        type: "Invitación X10",
+        type: "Palco VIP Mujer",
         cantidad: statsX10?.length,
       },
       {

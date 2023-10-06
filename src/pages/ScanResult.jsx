@@ -68,7 +68,11 @@ const ScanResult = ({
     const jsonData = JSON.stringify(newRecordCode);
 
     fetch(
-      `${process.env.REACT_APP_BASE_URL}/api/v1.0/codes/add-record/${currentConcert}`,
+      `${process.env.REACT_APP_BASE_URL}/api/v1.0/codes/add-record/${
+        currentConcert
+          ? currentConcert
+          : JSON.parse(localStorage.getItem("currentConcert"))
+      }`,
       {
         method: "POST",
         headers: {
