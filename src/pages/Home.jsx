@@ -2,88 +2,21 @@ import React, { useEffect, useState } from "react";
 import "./Home.css";
 import ItemActivity from "../components/ItemActivity/ItemActivity";
 import { Link } from "react-router-dom";
+import { getStats } from "../utils/getStats";
 
 const Home = ({ validCodes, recordsCodes }) => {
   const [validCodesRecords, setValidCodesRecords] = useState([]);
   const [stats, setStats] = useState([]);
+  const [selectorStat, setSelectorStat] = useState("type");
 
   useEffect(() => {
     const v = recordsCodes?.filter((item) => item.status === "valid");
     setValidCodesRecords(v);
 
-    const statsM = recordsCodes?.filter(
-      (item) => item.status === "valid" && item.type === "Mujer"
-    );
-
-    const statsH = recordsCodes?.filter(
-      (item) => item.status === "valid" && item.type === "Hombre"
-    );
-
-    const statsX5 = recordsCodes?.filter(
-      (item) => item.status === "valid" && item.type === "Palco VIP Hombre"
-    );
-
-    const statsX10 = recordsCodes?.filter(
-      (item) => item.status === "valid" && item.type === "Palco VIP Mujer"
-    );
-
-    const statsGlenda = recordsCodes?.filter(
-      (item) => item.status === "valid" && item.user === "Glenda Roque"
-    );
-
-    const statsFabio = recordsCodes?.filter(
-      (item) => item.status === "valid" && item.user === "Fabio Gomez"
-    );
-
-    const statsRomina = recordsCodes?.filter(
-      (item) => item.status === "valid" && item.user === "Romina Roque"
-    );
-    const statsCarla = recordsCodes?.filter(
-      (item) => item.status === "valid" && item.user === "Carla Gomez"
-    );
-    const statsLeandro = recordsCodes?.filter(
-      (item) => item.status === "valid" && item.user === "Leandro De Yulis"
-    );
-
-    setStats([
-      {
-        type: "Mujer",
-        cantidad: statsM?.length,
-      },
-      {
-        type: "Hombre",
-        cantidad: statsH?.length,
-      },
-      {
-        type: "Palco VIP Hombre",
-        cantidad: statsX5?.length,
-      },
-      {
-        type: "Palco VIP Mujer",
-        cantidad: statsX10?.length,
-      },
-      {
-        type: "Glenda Perez",
-        cantidad: statsGlenda?.length,
-      },
-      {
-        type: "Fabio Gomez",
-        cantidad: statsFabio?.length,
-      },
-      {
-        type: "Romina Roque",
-        cantidad: statsRomina?.length,
-      },
-      {
-        type: "Carla Gomez",
-        cantidad: statsCarla?.length,
-      },
-      {
-        type: "Leandro De Yulis",
-        cantidad: statsLeandro?.length,
-      },
-    ]);
-  }, [recordsCodes]);
+    // Calcular estadísticas usando getUniqueValues
+    const statsTest = getStats(validCodes, recordsCodes, ["type", "user"]);
+    setStats(statsTest);
+  }, [recordsCodes, validCodes]);
 
   return (
     <div className="home-contenedor">
@@ -107,19 +40,47 @@ const Home = ({ validCodes, recordsCodes }) => {
           </strong>
         </h1>
       </div>
+      <div className="home-contenedor__stats__header">
+        <h2>Estadísticas</h2>
+        <Link
+          to="/estadisticas"
+          className="home-contenedor__activity__header__action">
+          VER TODO
+        </Link>
+      </div>
+      <div className="home-contenedor__stats__selector">
+        <ul className="home-contenedor__stats__selector__items">
+          <li
+            className={`home-contenedor__stats__selector__items__item ${
+              selectorStat === "type" && "active"
+            }`}
+            onClick={() => setSelectorStat("type")}>
+            Tipo
+          </li>
+          <li
+            className={`home-contenedor__stats__selector__items__item ${
+              selectorStat === "user" && "active"
+            }`}
+            onClick={() => setSelectorStat("user")}>
+            Usuario
+          </li>
+        </ul>
+      </div>
       <div className="home-contenedor__stats">
-        {stats.map((item, key) => (
-          <div
-            key={key}
-            className="home-contenedor__stats__item foreground-contenedor">
-            <span>{item.type}</span>
-            <h2>
-              {item.cantidad} (
-              {Math.round((item.cantidad / validCodesRecords?.length) * 100)}
-              %)
-            </h2>
-          </div>
-        ))}
+        <div className="home-contenedor__stats__content">
+          {stats?.[selectorStat]?.map((item, key) => (
+            <div
+              key={key}
+              className="home-contenedor__stats__item foreground-contenedor">
+              <span>{item.type || item.user}</span>
+              <h2>
+                {item.count} (
+                {Math.round((item.count / validCodesRecords?.length) * 100)}
+                %)
+              </h2>
+            </div>
+          ))}
+        </div>
       </div>
       <div className="home-contenedor__activity foreground-contenedor">
         <div className="home-contenedor__activity__header">
