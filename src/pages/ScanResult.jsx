@@ -16,6 +16,9 @@ const ScanResult = ({
   const [isNotUnique, setNotUnique] = useState();
 
   useEffect(() => {
+    if (!currentConcert) {
+      return;
+    }
     setNotUnique(null);
     const isValidCode = validCodes.find((item) => item.code === result);
     setCodeScanned(isValidCode);
@@ -189,6 +192,7 @@ const ScanResult = ({
               <div
                 style={{ marginTop: "8px" }}
                 className="result-contenedor__main__isnotuniquecode">
+                <h2 style={{ marginTop: "10px" }}>De la actividad</h2>
                 <ItemActivity recordCode={isNotUnique} />
               </div>
             )}

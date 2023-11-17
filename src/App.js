@@ -3,12 +3,31 @@ import { useSocket } from "./contexts/SocketContext";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
 import Menu from "./components/Menu";
+import Header from "./components/Header/Header";
 import Scanner from "./pages/Scanner";
 import ScanResult from "./pages/ScanResult";
 import Activity from "./pages/Activity";
+import { getCurrentConcert } from "./hooks/useGetCurrentConcert";
+import useCodeFetcher from "./hooks/useCodeFetcher";
+import useUpdateAtFetcher from "./hooks/useUpdateAtFetcher";
 
 function App() {
   const socket = useSocket();
+
+  const [currentConcert, setCurrentConcert] = useState();
+  const [result, setResult] = useState("");
+  const [validCodes, setValidCodes] = useState([]);
+  const [recordsCodes, setRecordsCodes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadingMessage, setLoadingMessage] = useState("Cargando...");
+  const [errors, setErrors] = useState([]);
+  const [fetchDataSocket, setFetchDataSocket] = useState(false);
+  const [hasUpdatedData, setHasUpdatedData] = useState(false);
+
+  const updateAtInfo = useUpdateAtFetcher(
+    currentConcert?.idConcert,
+    setHasUpdatedData
+  );
 
   useEffect(() => {
     // Maneja eventos o acciones cuando se conecta al servidor
@@ -17,8 +36,7 @@ function App() {
     });
 
     socket.on("fetch_data", () => {
-      fetchValidCodes(currentConcert);
-      fetchRegistrationCodes(currentConcert);
+      setFetchDataSocket(!fetchDataSocket);
     });
 
     // Maneja eventos cuando se desconecta del servidor
@@ -32,142 +50,124 @@ function App() {
     };
   }, [socket]);
 
-  const [currentConcert, setCurrentConcert] = useState();
-  const [currentUpdatedAt, setCurrentUpdatedAt] = useState();
-  const [result, setResult] = useState("");
-  const [validCodes, setValidCodes] = useState([]);
-  const [recordsCodes, setRecordsCodes] = useState([]);
-  const [toScan, setToScan] = useState(false);
-
-  const fetchValidCodes = (currentConcert) => {
-    fetch(
-      `${process.env.REACT_APP_BASE_URL}/api/v1.0/codes/valid/${
-        currentConcert
-          ? currentConcert
-          : JSON.parse(localStorage.getItem("currentConcert"))
-      }`,
-      {
-        headers: {
-          authorization: `bearer ${process.env.REACT_APP_TOKEN}`,
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((json) => {
-        setValidCodes(json.validationCodes);
-        localStorage.setItem(
-          "validationCodes",
-          JSON.stringify(json.validationCodes)
-        );
-      });
-  };
-
-  const fetchRegistrationCodes = (currentConcert) => {
-    fetch(
-      `${process.env.REACT_APP_BASE_URL}/api/v1.0/codes/registration/${
-        currentConcert
-          ? currentConcert
-          : JSON.parse(localStorage.getItem("currentConcert"))
-      }`,
-      {
-        headers: {
-          authorization: `bearer ${process.env.REACT_APP_TOKEN}`,
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((json) => {
-        setRecordsCodes(json.registrationCodes);
-        localStorage.setItem(
-          "registrationCodes",
-          JSON.stringify(json.registrationCodes)
-        );
-      });
-  };
-
-  const fetchUpdatedAt = (currentConcert) => {
-    fetch(
-      `${process.env.REACT_APP_BASE_URL}/api/v1.0/concerts/update-at/${currentConcert}`,
-      {
-        headers: {
-          authorization: `bearer ${process.env.REACT_APP_TOKEN}`,
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((json) => {
-        setCurrentUpdatedAt(json.updateAt);
-
-        const localUpdatedAt = JSON.parse(localStorage.getItem("updatedAt"));
-        if (json.updateAt !== localUpdatedAt) {
-          fetchRegistrationCodes(currentConcert);
-          fetchValidCodes(currentConcert);
-          localStorage.setItem("updatedAt", JSON.stringify(json.updateAt));
-        }
-      });
-  };
-
-  const updateDataNextConcert = () => {
-    fetch(`${process.env.REACT_APP_BASE_URL}/api/v1.0/concerts/get-next`, {
-      headers: {
-        authorization: `bearer ${process.env.REACT_APP_TOKEN}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        setCurrentConcert(json._id);
-        const localConcert = JSON.parse(localStorage.getItem("currentConcert"));
-
-        if (json._id !== localConcert) {
-          fetchValidCodes(json._id);
-          fetchRegistrationCodes(json._id);
-          localStorage.setItem("currentConcert", JSON.stringify(json._id));
-        }
-      });
+  const fetchCurrentConcert = async () => {
+    try {
+      setIsLoading(true);
+      setLoadingMessage("Obteniendo el concierto actual...");
+      const concertData = await getCurrentConcert();
+      setCurrentConcert(concertData);
+    } catch (error) {
+      console.error("Error fetching current concert:", error);
+      setErrors((prevErrors) => [
+        ...prevErrors,
+        ["Falló al intentar obtener el concierto actual.", error.message],
+      ]);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+        setLoadingMessage("");
+      }, 1000);
+    }
   };
 
   useEffect(() => {
-    updateDataNextConcert();
+    fetchCurrentConcert();
   }, []);
 
-  useEffect(() => {
-    if (currentConcert) {
-      fetchUpdatedAt(currentConcert);
-    }
-  }, [currentConcert]);
+  const {
+    codes: registrationCodes,
+    loading: registrationLoading,
+    error: registrationError,
+  } = useCodeFetcher(
+    "registration",
+    currentConcert?.idConcert,
+    fetchDataSocket,
+    hasUpdatedData
+  );
+
+  const {
+    codes: validationCodes,
+    loading: validationLoading,
+    error: validationError,
+  } = useCodeFetcher(
+    "validation",
+    currentConcert?.idConcert,
+    fetchDataSocket,
+    hasUpdatedData
+  );
 
   useEffect(() => {
-    const isStoraged = {
-      registrationCodes: localStorage.getItem("registrationCodes"),
-      validCodes: localStorage.getItem("validationCodes"),
-    };
-    if (
-      !(isStoraged.registrationCodes && isStoraged.validCodes) &&
-      currentConcert
-    ) {
-      fetchValidCodes(currentConcert);
-      fetchRegistrationCodes(currentConcert);
+    if (updateAtInfo.loading) {
+      if (isLoading) {
+        setTimeout(() => {
+          setIsLoading(updateAtInfo.loading);
+          setLoadingMessage("Buscando una actualización de datos...");
+        }, 2000);
+      } else {
+        setTimeout(() => {
+          setIsLoading(updateAtInfo.loading);
+          setLoadingMessage("Buscando una actualización de datos...");
+        }, 2000);
+      }
     } else {
-      setRecordsCodes(JSON.parse(isStoraged.registrationCodes));
-      setValidCodes(JSON.parse(isStoraged.validCodes));
+      setTimeout(() => {
+        setIsLoading(false);
+        setLoadingMessage("");
+      }, 2000);
     }
-  }, [currentConcert]);
+
+    if (updateAtInfo.error) {
+      // Manejar errores
+      const updatedAtErrors = updateAtInfo.error || [];
+
+      // Agregar errores al array de errores
+      setErrors((prevErrors) => [...prevErrors, updatedAtErrors]);
+    }
+  }, [updateAtInfo.loading, updateAtInfo.error]);
 
   useEffect(() => {
-    const isStoraged = {
-      registrationCodes: localStorage.getItem("registrationCodes"),
-      validCodes: localStorage.getItem("validationCodes"),
-    };
-
-    if (toScan && !(isStoraged.registrationCodes && isStoraged.validCodes)) {
-      fetchValidCodes(currentConcert);
-      fetchRegistrationCodes(currentConcert);
+    // Actualizar isLoading cuando registrationLoading o validationLoading cambien
+    if (currentConcert && (registrationLoading || validationLoading)) {
+      setIsLoading(registrationLoading || validationLoading);
+      setLoadingMessage("Obteniendo códigos...");
+    } else {
+      setTimeout(() => {
+        setLoadingMessage("");
+        setIsLoading(false);
+      }, 1000);
     }
-  }, [toScan]);
+
+    // Manejar errores
+    const registrationErrors = registrationError || [];
+    const validationErrors = validationError || [];
+
+    // Agregar errores al array de errores
+    setErrors([...registrationErrors, ...validationErrors]);
+
+    if (validationCodes && registrationCodes) {
+      setRecordsCodes(registrationCodes);
+      setValidCodes(validationCodes);
+    }
+  }, [
+    registrationLoading,
+    validationLoading,
+    validationCodes,
+    registrationCodes,
+    updateAtInfo.hasUpdate,
+    validationError,
+    registrationError,
+    currentConcert,
+  ]);
 
   return (
     <>
       <BrowserRouter>
+        <Header
+          currentConcert={currentConcert}
+          isLoading={isLoading}
+          loadingMessage={loadingMessage}
+          errors={errors}
+        />
         <Routes>
           <Route
             exact
@@ -189,10 +189,9 @@ function App() {
                 result={result}
                 validCodes={validCodes}
                 recordsCodes={recordsCodes}
-                setToScan={setToScan}
                 setRecordsCodes={setRecordsCodes}
                 socket={socket}
-                currentConcert={currentConcert}
+                currentConcert={currentConcert?.idConcert}
               />
             }></Route>
           <Route
