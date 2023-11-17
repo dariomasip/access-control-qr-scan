@@ -1,0 +1,42 @@
+.stats-contenedor {
+    padding: 0 .8rem;
+    margin-top: .8rem;
+    display: grid;
+    row-gap: 1.1rem;
+    max-height: 91vh;
+}
+
+.stats-contenedor h5 {
+    margin-bottom: 10px;
+}
+
+.stats-contenedor__ranking {
+    list-style: none;
+}
+
+.stats-contenedor__ranking__item {
+    display: flex;
+    align-items: center;
+    column-gap: 20px;
+    margin-bottom: 14px;
+}
+
+.number__position {
+    font-weight: 500;
+    font-size: 40px;
+}
+
+.stats-contenedor__ranking__item__info__user {
+    font-weight: 700;
+}
+
+.stats-contenedor__ranking__item__info__codes {
+    font-size: 14px;
+    color: rgb(216, 216, 216);
+    text-wrap: balance;
+}
+
+.efectividad {
+    font-size: 24px;
+    color: #E0BE38;
+}

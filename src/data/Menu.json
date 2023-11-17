@@ -21,9 +21,11 @@
     "path": "/scan"
   },
   {
-    "name": "Novedades",
-    "iconSrc": "/icons/notifications.svg",
-    "disabled": true
+    "name": "Estadísticas",
+    "iconSrc": "/icons/stats.svg",
+    "iconSrcActive": "/icons/stats-active.svg",
+    "disabled": false,
+    "path": "/estadisticas"
   },
   {
     "name": "Más",

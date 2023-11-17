@@ -16,7 +16,7 @@ const ScanResult = ({
   const [isNotUnique, setNotUnique] = useState();
 
   useEffect(() => {
-    if (!currentConcert) {
+    if (!currentConcert || !result) {
       return;
     }
     setNotUnique(null);

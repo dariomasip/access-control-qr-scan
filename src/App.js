@@ -10,6 +10,7 @@ import Activity from "./pages/Activity";
 import { getCurrentConcert } from "./hooks/useGetCurrentConcert";
 import useCodeFetcher from "./hooks/useCodeFetcher";
 import useUpdateAtFetcher from "./hooks/useUpdateAtFetcher";
+import Stats from "./pages/Stats";
 
 function App() {
   const socket = useSocket();
@@ -178,8 +179,12 @@ function App() {
           <Route
             exact
             path="/scan"
+            element={<Scanner setResult={setResult} />}></Route>
+          <Route
+            exact
+            path="/estadisticas"
             element={
-              <Scanner setToScan={setToScan} setResult={setResult} />
+              <Stats recordsCodes={recordsCodes} validCodes={validCodes} />
             }></Route>
           <Route
             exact
