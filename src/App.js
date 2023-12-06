@@ -197,6 +197,9 @@ function App() {
                 setRecordsCodes={setRecordsCodes}
                 socket={socket}
                 currentConcert={currentConcert?.idConcert}
+                setErrors={setErrors}
+                setIsLoading={setIsLoading}
+                setLoadingMessage={setLoadingMessage}
               />
             }></Route>
           <Route

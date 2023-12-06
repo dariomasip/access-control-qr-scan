@@ -9,6 +9,9 @@ const ScanResult = ({
   setRecordsCodes,
   socket,
   currentConcert,
+  setErrors,
+  setIsLoading,
+  setLoadingMessage,
 }) => {
   const [validationCode, setValidationCode] = useState([{}]);
   const [isValidCode, setValidCode] = useState(null);
@@ -70,6 +73,8 @@ const ScanResult = ({
 
     const jsonData = JSON.stringify(newRecordCode);
 
+    setIsLoading(true);
+    setLoadingMessage("Enviando el registro al servidor...");
     fetch(
       `${process.env.REACT_APP_BASE_URL}/api/v1.0/codes/add-record/${
         currentConcert
@@ -84,51 +89,63 @@ const ScanResult = ({
         },
         body: jsonData,
       }
-    ).then(() => {
-      const registrationCodesLocalStorage =
-        localStorage.getItem("registrationCodes");
+    )
+      .then(() => {
+        const registrationCodesLocalStorage =
+          localStorage.getItem("registrationCodes");
 
-      const newRecordLocalStorage = [
-        ...JSON.parse(registrationCodesLocalStorage),
-        newRecordCode,
-      ];
+        const newRecordLocalStorage = [
+          ...JSON.parse(registrationCodesLocalStorage),
+          newRecordCode,
+        ];
 
-      setRecordsCodes(newRecordLocalStorage);
+        setRecordsCodes(newRecordLocalStorage);
 
-      localStorage.setItem(
-        "registrationCodes",
-        JSON.stringify(newRecordLocalStorage)
-      );
-
-      const newDateUpdated = {
-        updateAt: new Date(),
-      };
-
-      const jsonDataUpdated = JSON.stringify(newDateUpdated);
-
-      fetch(
-        `${process.env.REACT_APP_BASE_URL}/api/v1.0/concerts/update-at/${
-          currentConcert
-            ? currentConcert
-            : JSON.parse(localStorage.getItem("currentConcert"))
-        }`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `bearer ${process.env.REACT_APP_TOKEN}`,
-          },
-          body: jsonDataUpdated,
-        }
-      ).then(() => {
         localStorage.setItem(
-          "updatedAt",
-          JSON.stringify(newDateUpdated.updateAt)
+          "registrationCodes",
+          JSON.stringify(newRecordLocalStorage)
         );
-      });
 
-      socket.emit("record_code", "Código escaneado.");
-    });
+        const newDateUpdated = {
+          updateAt: new Date(),
+        };
+
+        const jsonDataUpdated = JSON.stringify(newDateUpdated);
+
+        fetch(
+          `${process.env.REACT_APP_BASE_URL}/api/v1.0/concerts/update-at/${
+            currentConcert
+              ? currentConcert
+              : JSON.parse(localStorage.getItem("currentConcert"))
+          }`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `bearer ${process.env.REACT_APP_TOKEN}`,
+            },
+            body: jsonDataUpdated,
+          }
+        ).then(() => {
+          localStorage.setItem(
+            "updatedAt",
+            JSON.stringify(newDateUpdated.updateAt)
+          );
+        });
+
+        socket.emit("record_code", "Código escaneado.");
+      })
+      .catch((error) => {
+        console.error("Error en la solicitud Fetch:", error);
+        setErrors((prevErrors) => [
+          ...prevErrors,
+          ["Falló al intentar enviar el registro al servidor.", error.message],
+        ]);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setLoadingMessage("");
+      });
   }, [result]);
 
   return (
